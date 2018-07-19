@@ -73,8 +73,6 @@ namespace MotionDetector
             _sensorManagerOrient.RegisterListener(this,
                                            _sensorManagerOrient.GetDefaultSensor(SensorType.Orientation),
                                            SensorDelay.Ui);
-
-
         }
 
         protected override void OnPause()
