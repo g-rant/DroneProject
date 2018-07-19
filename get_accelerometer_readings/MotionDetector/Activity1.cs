@@ -27,7 +27,7 @@ namespace MotionDetector
 
         public void OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
         {
-            // We don't want to do anything here.
+            // We don't want to do anything here. 
         }
 
         public void OnSensorChanged(SensorEvent e)
