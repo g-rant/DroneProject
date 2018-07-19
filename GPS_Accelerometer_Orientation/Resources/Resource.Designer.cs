@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("MotionDetector.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("com.xamarin.recipes.getlocation.Resource", IsApplication=true)]
 
-namespace MotionDetector
+namespace com.xamarin.recipes.getlocation
 {
 	
 	
@@ -60,11 +60,11 @@ namespace MotionDetector
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050000
-			public const int accelerometer_text = 2131034112;
-			
 			// aapt resource value: 0x7f050001
-			public const int location_text = 2131034113;
+			public const int accel_text = 2131034113;
+			
+			// aapt resource value: 0x7f050000
+			public const int location_text = 2131034112;
 			
 			static Id()
 			{

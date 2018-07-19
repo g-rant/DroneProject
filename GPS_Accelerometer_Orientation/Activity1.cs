@@ -1,43 +1,36 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Android.App;
 using Android.Hardware;
 using Android.Locations;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MotionDetector
+namespace com.xamarin.recipes.getlocation
 {
-    [Activity(Label = "MotionDetector and GPS", MainLauncher = true, Icon = "@drawable/icon")]
-    public class Activity1 : Activity, ISensorEventListener, ILocationListener
+    [Activity(Label = "GPS_Accelerometer_Orientation", MainLauncher = true, Icon = "@drawable/icon")]
+    public class Activity1 : Activity, ILocationListener, ISensorEventListener
     {
         static readonly string TAG = "X:" + typeof(Activity1).Name;
+        // TextView _addressText;
         Location _currentLocation;
         LocationManager _locationManager;
+        string _locationProvider;
         TextView _locationText;
 
         static readonly object _syncLock = new object();
         SensorManager _sensorManagerOrient;
         SensorManager _sensorManagerAccel;
-         TextView _sensorTextView;
+        TextView _sensorTextView;
 
-        private float x, y, z, pitch, roll, azimuth,longitude, latitude;
-        string _locationProvider;
+        private float x, y, z, pitch, roll, azimuth, longitude, latitude;
 
-        //Activity1()
-        //{
-        //    x = 0f;
-        //    y = 0f;
-        //    z = 0f;
-        //    pitch = 0f;
-        //    roll = 0f;
-        //    azimuth = 0f;
-        //}
-
-        public void OnLocationChanged(Location location)
+        public /* async */ void OnLocationChanged(Location location)
         {
             _currentLocation = location;
             if (_currentLocation == null)
@@ -46,8 +39,8 @@ namespace MotionDetector
             }
             else
             {
-                _locationText.Text = string.Format("{0:f6},{1:f6}", _currentLocation.Latitude, _currentLocation.Longitude);
-                //    Address address = await ReverseGeocodeCurrentLocation();
+                _locationText.Text = string.Format("latitude={0:f6}\nlongitude={1:f6}\n", _currentLocation.Latitude, _currentLocation.Longitude);
+                //    Address address = await ReverseGeocodeCurrentLocation(); nah
                 //   DisplayAddress(address);
 
             }
@@ -74,32 +67,33 @@ namespace MotionDetector
                     z = e.Values[2];
                 }
 
-                else if (sensor.Type.ToString().Contains("rientation")) 
+                else if (sensor.Type.ToString().Contains("rientation"))
                 {
                     azimuth = e.Values[0];
                     pitch = e.Values[1];
                     roll = e.Values[2];
+
                 }
                 _sensorTextView.Text = string.Format("x={0:f}\n y={1:f}\n z={2:f}\n Pitch={3:f}\n Roll={4:f}\n Azimuth={5:f}", x, y, z, pitch, roll, azimuth);
             }
         }
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
+            base.OnCreate(bundle);
             SetContentView(Resource.Layout.Main);
 
+            //_addressText = FindViewById<TextView>(Resource.Id.address_text);
             _locationText = FindViewById<TextView>(Resource.Id.location_text);
+            //   FindViewById<TextView>(Resource.Id.get_address_button).Click += AddressButton_OnClick;
 
             InitializeLocationManager();
-
 
 
             _sensorManagerOrient = (SensorManager)GetSystemService(SensorService);
             _sensorManagerAccel = (SensorManager)GetSystemService(SensorService);
             // _sensorTextView = FindViewById<TextView>(Resource.Id.accelerometer_text);
-            _sensorTextView = FindViewById<TextView>(Resource.Id.accelerometer_text);
-           
+            _sensorTextView = FindViewById<TextView>(Resource.Id.accel_text);
         }
 
         void InitializeLocationManager()
@@ -121,6 +115,7 @@ namespace MotionDetector
             }
             Log.Debug(TAG, "Using " + _locationProvider + ".");
         }
+
         protected override void OnResume()
         {
             base.OnResume();
@@ -142,13 +137,54 @@ namespace MotionDetector
             _locationManager.RemoveUpdates(this);
             Log.Debug(TAG, "No longer listening for location updates.");
 
+
             _sensorManagerOrient.UnregisterListener(this);
             _sensorManagerAccel.UnregisterListener(this);
-  
+
         }
+
 
         public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
         {
         }
+        //async void AddressButton_OnClick(object sender, EventArgs eventArgs)
+        //{
+        //    if (_currentLocation == null)
+        //    {
+        //        _addressText.Text = "Can't determine the current address. Try again in a few minutes.";
+        //        return;
+        //    }
+
+        //    Address address = await ReverseGeocodeCurrentLocation();
+        //    DisplayAddress(address);
+        //}
+
+        //async Task<Address> ReverseGeocodeCurrentLocation()
+        //{
+        //    Geocoder geocoder = new Geocoder(this);
+        //    IList<Address> addressList =
+        //        await geocoder.GetFromLocationAsync(_currentLocation.Latitude, _currentLocation.Longitude, 10);
+
+        //    Address address = addressList.FirstOrDefault();
+        //    return address;
+        //}
+
+        //void DisplayAddress(Address address)
+        //{
+        //    if (address != null)
+        //    {
+        //        StringBuilder deviceAddress = new StringBuilder();
+        //        for (int i = 0; i < address.MaxAddressLineIndex; i++)
+        //        {
+        //            deviceAddress.AppendLine(address.GetAddressLine(i));
+        //        }
+        //        // Remove the last comma from the end of the address.
+        //        _addressText.Text = deviceAddress.ToString();
+        //    }
+        //    else
+        //    {
+        //        _addressText.Text = "Unable to determine the address. Try again in a few minutes.";
+        //    }
+        //}
     }
 }
