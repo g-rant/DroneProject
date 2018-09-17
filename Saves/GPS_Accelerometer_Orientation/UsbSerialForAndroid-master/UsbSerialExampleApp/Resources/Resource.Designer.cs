@@ -26,8 +26,6 @@ namespace UsbSerialExampleApp
 		
 		public static void UpdateIdValues()
 		{
-			global::Hoho.Android.UsbSerial.Resource.String.ApplicationName = global::UsbSerialExampleApp.Resource.String.ApplicationName;
-			global::Hoho.Android.UsbSerial.Resource.String.Hello = global::UsbSerialExampleApp.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -121,23 +119,17 @@ namespace UsbSerialExampleApp
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f050001
-			public const int ApplicationName = 2131034113;
-			
 			// aapt resource value: 0x7f050000
-			public const int Hello = 2131034112;
+			public const int app_name = 2131034112;
+			
+			// aapt resource value: 0x7f050001
+			public const int refreshing = 2131034113;
 			
 			// aapt resource value: 0x7f050002
-			public const int app_name = 2131034114;
+			public const int sleep = 2131034114;
 			
 			// aapt resource value: 0x7f050003
-			public const int refreshing = 2131034115;
-			
-			// aapt resource value: 0x7f050004
-			public const int sleep = 2131034116;
-			
-			// aapt resource value: 0x7f050005
-			public const int wakeup = 2131034117;
+			public const int wakeup = 2131034115;
 			
 			static String()
 			{
