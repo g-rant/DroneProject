@@ -23,20 +23,12 @@ namespace com.xamarin.recipes.getlocation
         string _locationProvider;
         TextView _locationText;
 
-
-        Boolean onOff = false;
-        int AverageCount = 0;
-        static int AveragerSize = 1;
-        float[] PitchA = new float[AveragerSize];
-        float[] RollA = new float[AveragerSize];
-        float[] AzimuthA = new float[AveragerSize];
-
         static readonly object _syncLock = new object();
         SensorManager _sensorManagerOrient;
         SensorManager _sensorManagerAccel;
         TextView _sensorTextView;
 
-        private float x, y, z, pitch, roll, azimuth;
+        private float x, y, z, pitch, roll, azimuth, longitude, latitude;
 
         public /* async */ void OnLocationChanged(Location location)
         {
@@ -70,67 +62,21 @@ namespace com.xamarin.recipes.getlocation
                 Sensor sensor = e.Sensor;
                 if (sensor.Type.ToString().Contains("ccelerometer"))
                 {
-                    x = e.Values[2];
+                    x = e.Values[0];
                     y = e.Values[1];
-                    z = e.Values[0];
+                    z = e.Values[2];
                 }
 
                 else if (sensor.Type.ToString().Contains("rientation"))
                 {
-                    Boolean Average = false;
-                    if (Average == true)
-                    {
-                        if (AverageCount >= AveragerSize)
-                        {
-                            onOff = true;
-                        }
-                        if (AverageCount >= AveragerSize)
-                        {
-                            AverageCount = 0;
-                        }
-                        else
-                        {
-                            PitchA[AverageCount] = e.Values[2];
-                            RollA[AverageCount] = e.Values[1];
-                            AzimuthA[AverageCount] = e.Values[0];
-                            AverageCount++;
-                        }
-                        if (onOff == true)
-                        {
-                            float sum = 0;
-                            for (int i = 0; i < AveragerSize; i++)
-                            {
-                                sum += PitchA[i];
-                            }
-                            pitch = sum / AveragerSize;
-                            sum = 0;
-                            for (int i = 0; i < AveragerSize; i++)
-                            {
-                                sum += RollA[i];
-                            }
-                            roll = sum / AveragerSize;
-                            sum = 0;
-                            for (int i = 0; i < AveragerSize; i++)
-                            {
-                                sum += AzimuthA[i];
-                            }
-                            azimuth = sum / AveragerSize;
-                        }
-                    }
-                    else if (Average == false)
-                    {
-                        azimuth = e.Values[0];//A-R, R-P, P-A
-                        pitch = e.Values[2];//1
-                        roll = e.Values[1];//2
-                    }
+                    azimuth = e.Values[0];
+                    pitch = e.Values[1];
+                    roll = e.Values[2];
 
-                   
                 }
-
+                _sensorTextView.Text = string.Format("x={0:f}\n y={1:f}\n z={2:f}\n Pitch={3:f}\n Roll={4:f}\n Azimuth={5:f}", x, y, z, pitch, roll, azimuth);
             }
-            _sensorTextView.Text = string.Format("x={0:f}\n y={1:f}\n z={2:f}\n Pitch={3:f}\n Roll={4:f}\n Azimuth={5:f}", x, y, z, pitch, roll, azimuth);
         }
-    
 
         protected override void OnCreate(Bundle bundle)
         {
